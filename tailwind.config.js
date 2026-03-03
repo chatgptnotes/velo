@@ -8,24 +8,41 @@ export default {
     extend: {
       colors: {
         primary: {
-          bg: '#F8FAFC', // light page background
-          card: '#FFFFFF', // white cards
-          main: '#1B4332', // deep forest green
-          secondary: '#2D6A4F', // medium green
-          gold: '#B8860B', // dark goldenrod
-          success: '#059669', // green
-          danger: '#DC2626', // red
-          text: '#1E293B', // primary text
-          'text-secondary': '#475569', // secondary text
-          'text-muted': '#94A3B8', // muted text
-          border: '#E2E8F0', // borders
+          DEFAULT: '#0F4C75',
+          50: '#F0F7FF',
+          100: '#E0EFFF',
+          500: '#0F4C75',
+          600: '#0D3F63',
+          700: '#0A3251',
+        },
+        secondary: {
+          DEFAULT: '#3282B8',
+          50: '#F0F8FF',
+          100: '#E0F2FE',
+          500: '#3282B8',
+          600: '#2B6E9E',
+        },
+        accent: {
+          DEFAULT: '#B8860B',
+          50: '#FFFDF0',
+          100: '#FFFBE0',
+          500: '#B8860B',
+          600: '#A07209',
+        },
+        success: '#16A34A',
+        warning: '#F59E0B',
+        danger: '#DC2626',
+        gray: {
+          900: '#1E293B',
+          600: '#475569',
+        },
+        background: {
+          DEFAULT: '#F8FAFC',
+          card: '#FFFFFF',
         }
       },
       fontFamily: {
-        'sans': ['Inter', 'system-ui', 'sans-serif'],
-      },
-      boxShadow: {
-        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
       },
     },
   },

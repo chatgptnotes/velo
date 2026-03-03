@@ -1,359 +1,461 @@
 import { useState } from 'react'
-import { User, Shield, Bell, Download, UserCheck, Eye, EyeOff, Smartphone, Mail, Lock } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
+import { 
+  Home, 
+  Briefcase, 
+  Receipt, 
+  Target, 
+  Shield, 
+  FileText, 
+  Settings as SettingsIcon,
+  User,
+  Bell,
+  Lock,
+  Users,
+  Save,
+  Eye,
+  EyeOff
+} from 'lucide-react'
+import Layout from '../components/Layout'
 
-const Settings = () => {
+const sidebarItems = [
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'Portfolio', href: '/portfolio', icon: Briefcase },
+  { name: 'Tax Center', href: '/tax-center', icon: Receipt },
+  { name: 'Goals', href: '/goals', icon: Target },
+  { name: 'Risk Analysis', href: '/risk-analysis', icon: Shield },
+  { name: 'Documents', href: '/documents', icon: FileText },
+  { name: 'Settings', href: '/settings', icon: SettingsIcon },
+]
+
+export default function Settings() {
+  const location = useLocation()
+  const [activeTab, setActiveTab] = useState('profile')
   const [showPassword, setShowPassword] = useState(false)
   const [twoFactorEnabled, setTwoFactorEnabled] = useState(true)
-  const [emailNotifications, setEmailNotifications] = useState(true)
-  const [smsNotifications, setSmsNotifications] = useState(false)
-  const [advisorAccess, setAdvisorAccess] = useState(false)
-
-  const [profileData, setProfileData] = useState({
-    fullName: 'Rajesh Kumar Agarwal',
-    email: 'rajesh.agarwal@example.com',
-    phone: '+91 98765 43210',
-    panNumber: 'ABCDE1234F'
+  const [notifications, setNotifications] = useState({
+    email: true,
+    sms: false,
+    portfolio: true,
+    market: true,
+    tax: true
   })
 
-  const handleProfileUpdate = (field: string, value: string) => {
-    setProfileData(prev => ({
-      ...prev,
-      [field]: value
-    }))
-  }
-
-  const activeSessions = [
-    { device: 'MacBook Pro', location: 'Mumbai, India', lastActive: '2 minutes ago', current: true },
-    { device: 'iPhone 14 Pro', location: 'Mumbai, India', lastActive: '1 hour ago', current: false },
-    { device: 'iPad Air', location: 'Delhi, India', lastActive: '3 days ago', current: false }
+  const tabs = [
+    { id: 'profile', name: 'Profile', icon: User },
+    { id: 'security', name: 'Security', icon: Lock },
+    { id: 'notifications', name: 'Notifications', icon: Bell },
+    { id: 'advisor', name: 'Advisor Access', icon: Users },
   ]
 
-  const maskPAN = (pan: string) => {
-    if (pan.length < 6) return pan
-    return pan.substring(0, 5) + '*'.repeat(pan.length - 6) + pan.substring(pan.length - 1)
-  }
-
   return (
-    <div className="p-6 space-y-8">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-primary-text">Account Settings</h1>
-          <p className="text-primary-text-secondary mt-1">Manage your profile, security, and preferences</p>
+    <Layout isAuthenticated={true} showFooter={false}>
+      <div className="flex h-screen bg-background">
+        {/* Sidebar */}
+        <div className="w-64 bg-white shadow-sm border-r border-gray-200">
+          <div className="flex flex-col h-full">
+            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+              <nav className="mt-5 flex-1 px-2 space-y-1">
+                {sidebarItems.map((item) => {
+                  const Icon = item.icon
+                  const isActive = location.pathname === item.href
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className={`${
+                        isActive
+                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
+                    >
+                      <Icon
+                        className={`${
+                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                        } mr-3 h-5 w-5`}
+                      />
+                      {item.name}
+                    </Link>
+                  )
+                })}
+              </nav>
+            </div>
+          </div>
         </div>
-      </div>
 
-      {/* Profile Information */}
-      <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
-        <div className="flex items-center mb-6">
-          <User className="w-5 h-5 text-primary-gold mr-2" />
-          <h2 className="text-xl font-semibold text-primary-text">Profile Information</h2>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-medium text-primary-text mb-2">
-              Full Name
-            </label>
-            <input
-              type="text"
-              value={profileData.fullName}
-              onChange={(e) => handleProfileUpdate('fullName', e.target.value)}
-              className="w-full px-4 py-3 bg-primary-bg border border-gray-600 rounded-lg text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-gold focus:border-transparent"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-primary-text mb-2">
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={profileData.email}
-              onChange={(e) => handleProfileUpdate('email', e.target.value)}
-              className="w-full px-4 py-3 bg-primary-bg border border-gray-600 rounded-lg text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-gold focus:border-transparent"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-primary-text mb-2">
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              value={profileData.phone}
-              onChange={(e) => handleProfileUpdate('phone', e.target.value)}
-              className="w-full px-4 py-3 bg-primary-bg border border-gray-600 rounded-lg text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-gold focus:border-transparent"
-            />
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-primary-text mb-2">
-              PAN Number
-            </label>
-            <input
-              type="text"
-              value={maskPAN(profileData.panNumber)}
-              readOnly
-              className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-primary-text-secondary cursor-not-allowed"
-            />
-            <p className="text-xs text-primary-text-secondary mt-1">
-              Contact support to update PAN details
-            </p>
-          </div>
-        </div>
-        
-        <div className="mt-6">
-          <button className="bg-primary-gold text-primary-bg px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors">
-            Update Profile
-          </button>
-        </div>
-      </div>
+        {/* Main content */}
+        <div className="flex-1 overflow-auto">
+          <div className="p-8">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900">Settings</h1>
+              <p className="text-gray-600 mt-2">Manage your account preferences and security settings</p>
+            </div>
 
-      {/* Security Settings */}
-      <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
-        <div className="flex items-center mb-6">
-          <Shield className="w-5 h-5 text-primary-gold mr-2" />
-          <h2 className="text-xl font-semibold text-primary-text">Security</h2>
-        </div>
-        
-        {/* Change Password */}
-        <div className="mb-6">
-          <h3 className="text-lg font-medium text-primary-text mb-4">Change Password</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-primary-text mb-2">
-                Current Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  className="w-full px-4 py-3 bg-primary-bg border border-gray-600 rounded-lg text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-gold focus:border-transparent pr-12"
-                  placeholder="Enter current password"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-primary-gold"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+            {/* Settings Tabs */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
+              <div className="border-b border-gray-200">
+                <nav className="flex space-x-8 px-6">
+                  {tabs.map((tab) => {
+                    const Icon = tab.icon
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id)}
+                        className={`${
+                          activeTab === tab.id
+                            ? 'border-primary text-primary'
+                            : 'border-transparent text-gray-500 hover:text-gray-700'
+                        } flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm`}
+                      >
+                        <Icon className="h-5 w-5" />
+                        <span>{tab.name}</span>
+                      </button>
+                    )
+                  })}
+                </nav>
+              </div>
+
+              <div className="p-6">
+                {/* Profile Tab */}
+                {activeTab === 'profile' && (
+                  <div className="max-w-2xl">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Profile Information</h3>
+                    
+                    <div className="space-y-6">
+                      <div className="flex items-center space-x-6">
+                        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+                          <User className="h-10 w-10 text-primary" />
+                        </div>
+                        <button className="px-4 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                          Change Photo
+                        </button>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                          <input
+                            type="text"
+                            defaultValue="Rajesh Kumar"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                          <input
+                            type="email"
+                            defaultValue="rajesh.kumar@example.com"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                          <input
+                            type="tel"
+                            defaultValue="+91 98765 43210"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                          />
+                        </div>
+
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">PAN Number</label>
+                          <input
+                            type="text"
+                            defaultValue="ABCDE****F"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                            disabled
+                          />
+                        </div>
+                      </div>
+
+                      <div className="pt-4">
+                        <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors flex items-center space-x-2">
+                          <Save className="h-4 w-4" />
+                          <span>Save Changes</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Security Tab */}
+                {activeTab === 'security' && (
+                  <div className="max-w-2xl">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Security Settings</h3>
+                    
+                    <div className="space-y-6">
+                      {/* Change Password */}
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <h4 className="text-md font-medium text-gray-900 mb-4">Change Password</h4>
+                        <div className="space-y-4">
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+                            <div className="relative">
+                              <input
+                                type={showPassword ? 'text' : 'password'}
+                                className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                              />
+                              <button
+                                type="button"
+                                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                {showPassword ? <EyeOff className="h-4 w-4 text-gray-400" /> : <Eye className="h-4 w-4 text-gray-400" />}
+                              </button>
+                            </div>
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                            <input
+                              type="password"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                            <input
+                              type="password"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                            />
+                          </div>
+                          <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors">
+                            Update Password
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Two-Factor Authentication */}
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <h4 className="text-md font-medium text-gray-900">Two-Factor Authentication</h4>
+                            <p className="text-sm text-gray-600 mt-1">Add an extra layer of security to your account</p>
+                          </div>
+                          <button
+                            onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                              twoFactorEnabled ? 'bg-primary' : 'bg-gray-300'
+                            }`}
+                          >
+                            <span
+                              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                twoFactorEnabled ? 'translate-x-6' : 'translate-x-1'
+                              }`}
+                            />
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Active Sessions */}
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <h4 className="text-md font-medium text-gray-900 mb-4">Active Sessions</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between py-2">
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">Current session</p>
+                              <p className="text-xs text-gray-600">Chrome on Windows • Mumbai, India</p>
+                            </div>
+                            <span className="text-xs text-success bg-success/10 px-2 py-1 rounded">Active</span>
+                          </div>
+                          <div className="flex items-center justify-between py-2">
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">Mobile app</p>
+                              <p className="text-xs text-gray-600">iOS • Last active 2 hours ago</p>
+                            </div>
+                            <button className="text-xs text-danger hover:text-danger/80">Revoke</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Notifications Tab */}
+                {activeTab === 'notifications' && (
+                  <div className="max-w-2xl">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Notification Preferences</h3>
+                    
+                    <div className="space-y-6">
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <h4 className="text-md font-medium text-gray-900 mb-4">Delivery Methods</h4>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">Email Notifications</p>
+                              <p className="text-xs text-gray-600">Receive updates via email</p>
+                            </div>
+                            <button
+                              onClick={() => setNotifications(prev => ({ ...prev, email: !prev.email }))}
+                              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                notifications.email ? 'bg-primary' : 'bg-gray-300'
+                              }`}
+                            >
+                              <span
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                  notifications.email ? 'translate-x-6' : 'translate-x-1'
+                                }`}
+                              />
+                            </button>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">SMS Notifications</p>
+                              <p className="text-xs text-gray-600">Receive alerts via SMS</p>
+                            </div>
+                            <button
+                              onClick={() => setNotifications(prev => ({ ...prev, sms: !prev.sms }))}
+                              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                notifications.sms ? 'bg-primary' : 'bg-gray-300'
+                              }`}
+                            >
+                              <span
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                  notifications.sms ? 'translate-x-6' : 'translate-x-1'
+                                }`}
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <h4 className="text-md font-medium text-gray-900 mb-4">Notification Types</h4>
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">Portfolio Updates</p>
+                              <p className="text-xs text-gray-600">Weekly portfolio performance reports</p>
+                            </div>
+                            <button
+                              onClick={() => setNotifications(prev => ({ ...prev, portfolio: !prev.portfolio }))}
+                              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                notifications.portfolio ? 'bg-primary' : 'bg-gray-300'
+                              }`}
+                            >
+                              <span
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                  notifications.portfolio ? 'translate-x-6' : 'translate-x-1'
+                                }`}
+                              />
+                            </button>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">Market Alerts</p>
+                              <p className="text-xs text-gray-600">Important market movements and news</p>
+                            </div>
+                            <button
+                              onClick={() => setNotifications(prev => ({ ...prev, market: !prev.market }))}
+                              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                notifications.market ? 'bg-primary' : 'bg-gray-300'
+                              }`}
+                            >
+                              <span
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                  notifications.market ? 'translate-x-6' : 'translate-x-1'
+                                }`}
+                              />
+                            </button>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-medium text-gray-900">Tax Reminders</p>
+                              <p className="text-xs text-gray-600">Important tax dates and deadlines</p>
+                            </div>
+                            <button
+                              onClick={() => setNotifications(prev => ({ ...prev, tax: !prev.tax }))}
+                              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                                notifications.tax ? 'bg-primary' : 'bg-gray-300'
+                              }`}
+                            >
+                              <span
+                                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                                  notifications.tax ? 'translate-x-6' : 'translate-x-1'
+                                }`}
+                              />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Advisor Access Tab */}
+                {activeTab === 'advisor' && (
+                  <div className="max-w-2xl">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-6">Advisor Access Management</h3>
+                    
+                    <div className="space-y-6">
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <h4 className="text-md font-medium text-gray-900 mb-4">Current Advisor</h4>
+                        <div className="flex items-center space-x-4">
+                          <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
+                            <Users className="h-6 w-6 text-secondary" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-gray-900">Priya Sharma, CFP</p>
+                            <p className="text-xs text-gray-600">Senior Wealth Advisor • WealthCorp Advisory</p>
+                            <p className="text-xs text-gray-600">priya.sharma@wealthcorp.in • +91 99988 77766</p>
+                          </div>
+                          <button className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
+                            Change Advisor
+                          </button>
+                        </div>
+                      </div>
+
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <h4 className="text-md font-medium text-gray-900 mb-4">Access Permissions</h4>
+                        <div className="space-y-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-900">View Portfolio</span>
+                            <span className="text-xs text-success bg-success/10 px-2 py-1 rounded">Granted</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-900">Make Transactions</span>
+                            <span className="text-xs text-danger bg-danger/10 px-2 py-1 rounded">Denied</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-900">Access Tax Documents</span>
+                            <span className="text-xs text-success bg-success/10 px-2 py-1 rounded">Granted</span>
+                          </div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-sm text-gray-900">Rebalance Portfolio</span>
+                            <span className="text-xs text-warning bg-warning/10 px-2 py-1 rounded">Approval Required</span>
+                          </div>
+                        </div>
+                        <button className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors">
+                          Modify Permissions
+                        </button>
+                      </div>
+
+                      <div className="bg-gray-50 rounded-lg p-6">
+                        <h4 className="text-md font-medium text-gray-900 mb-4">Session History</h4>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Last Login</span>
+                            <span className="text-gray-900">March 2, 2026 at 2:30 PM</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Portfolio Review</span>
+                            <span className="text-gray-900">February 28, 2026 at 11:15 AM</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Document Access</span>
+                            <span className="text-gray-900">February 25, 2026 at 4:45 PM</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-primary-text mb-2">
-                New Password
-              </label>
-              <input
-                type="password"
-                className="w-full px-4 py-3 bg-primary-bg border border-gray-600 rounded-lg text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-gold focus:border-transparent"
-                placeholder="Enter new password"
-              />
-            </div>
-          </div>
-          <button className="mt-4 bg-primary-gold text-primary-bg px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors">
-            Update Password
-          </button>
-        </div>
-
-        {/* Two-Factor Authentication */}
-        <div className="border-t border-gray-700 pt-6">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h3 className="text-lg font-medium text-primary-text">Two-Factor Authentication</h3>
-              <p className="text-sm text-primary-text-secondary">
-                Add an extra layer of security to your account
-              </p>
-            </div>
-            <button
-              onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                twoFactorEnabled ? 'bg-primary-gold' : 'bg-gray-600'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  twoFactorEnabled ? 'translate-x-6' : 'translate-x-1'
-                }`}
-              />
-            </button>
-          </div>
-          {twoFactorEnabled && (
-            <div className="bg-primary-bg p-4 rounded-lg">
-              <div className="flex items-center text-primary-success mb-2">
-                <Lock className="w-4 h-4 mr-2" />
-                <span className="font-medium">2FA Enabled</span>
-              </div>
-              <p className="text-sm text-primary-text-secondary mb-3">
-                Authenticator app is configured for your account
-              </p>
-              <button className="text-sm text-primary-gold hover:underline">
-                View Recovery Codes
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Active Sessions */}
-      <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
-        <h2 className="text-xl font-semibold text-primary-text mb-6">Active Sessions</h2>
-        <div className="space-y-4">
-          {activeSessions.map((session, index) => (
-            <div key={index} className="flex items-center justify-between p-4 bg-primary-bg rounded-lg">
-              <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${session.current ? 'bg-primary-success' : 'bg-gray-500'}`} />
-                <div>
-                  <p className="font-medium text-primary-text">
-                    {session.device} {session.current && '(Current)'}
-                  </p>
-                  <p className="text-sm text-primary-text-secondary">
-                    {session.location} • {session.lastActive}
-                  </p>
-                </div>
-              </div>
-              {!session.current && (
-                <button className="text-sm text-primary-danger hover:underline">
-                  Revoke
-                </button>
-              )}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Notification Preferences */}
-      <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
-        <div className="flex items-center mb-6">
-          <Bell className="w-5 h-5 text-primary-gold mr-2" />
-          <h2 className="text-xl font-semibold text-primary-text">Notification Preferences</h2>
-        </div>
-        
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Mail className="w-5 h-5 text-primary-text-secondary mr-3" />
-              <div>
-                <p className="font-medium text-primary-text">Email Notifications</p>
-                <p className="text-sm text-primary-text-secondary">
-                  Portfolio updates, market alerts, and security notifications
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setEmailNotifications(!emailNotifications)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                emailNotifications ? 'bg-primary-gold' : 'bg-gray-600'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  emailNotifications ? 'translate-x-6' : 'translate-x-1'
-                }`}
-              />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div className="flex items-center">
-              <Smartphone className="w-5 h-5 text-primary-text-secondary mr-3" />
-              <div>
-                <p className="font-medium text-primary-text">SMS Notifications</p>
-                <p className="text-sm text-primary-text-secondary">
-                  Critical alerts and transaction confirmations
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setSmsNotifications(!smsNotifications)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                smsNotifications ? 'bg-primary-gold' : 'bg-gray-600'
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  smsNotifications ? 'translate-x-6' : 'translate-x-1'
-                }`}
-              />
-            </button>
           </div>
         </div>
       </div>
-
-      {/* Advisor Access */}
-      <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
-        <div className="flex items-center mb-6">
-          <UserCheck className="w-5 h-5 text-primary-gold mr-2" />
-          <h2 className="text-xl font-semibold text-primary-text">Advisor Access</h2>
-        </div>
-        
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <p className="font-medium text-primary-text">Grant Advisor Access</p>
-            <p className="text-sm text-primary-text-secondary">
-              Allow your financial advisor to view your portfolio and documents
-            </p>
-          </div>
-          <button
-            onClick={() => setAdvisorAccess(!advisorAccess)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-              advisorAccess ? 'bg-primary-gold' : 'bg-gray-600'
-            }`}
-          >
-            <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                advisorAccess ? 'translate-x-6' : 'translate-x-1'
-              }`}
-            />
-          </button>
-        </div>
-
-        {advisorAccess && (
-          <div className="bg-primary-bg p-4 rounded-lg">
-            <p className="text-sm text-primary-text-secondary mb-3">
-              Advisor permissions: View portfolio, documents, and performance reports
-            </p>
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-primary-text">advisor@wealthmanagement.com</span>
-              <button className="text-sm text-primary-danger hover:underline">
-                Revoke Access
-              </button>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Data Export */}
-      <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
-        <div className="flex items-center mb-4">
-          <Download className="w-5 h-5 text-primary-gold mr-2" />
-          <h2 className="text-xl font-semibold text-primary-text">Data Export</h2>
-        </div>
-        
-        <p className="text-primary-text-secondary mb-6">
-          Download a complete copy of your portfolio data, transactions, and documents
-        </p>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <button className="bg-primary-bg border border-gray-600 p-4 rounded-lg hover:border-primary-gold transition-colors">
-            <h3 className="font-medium text-primary-text mb-2">Portfolio Data</h3>
-            <p className="text-sm text-primary-text-secondary">Holdings, performance, allocations</p>
-          </button>
-          
-          <button className="bg-primary-bg border border-gray-600 p-4 rounded-lg hover:border-primary-gold transition-colors">
-            <h3 className="font-medium text-primary-text mb-2">Transaction History</h3>
-            <p className="text-sm text-primary-text-secondary">Complete transaction records</p>
-          </button>
-          
-          <button className="bg-primary-bg border border-gray-600 p-4 rounded-lg hover:border-primary-gold transition-colors">
-            <h3 className="font-medium text-primary-text mb-2">Tax Reports</h3>
-            <p className="text-sm text-primary-text-secondary">Capital gains, dividend records</p>
-          </button>
-        </div>
-      </div>
-    </div>
+    </Layout>
   )
 }
-
-export default Settings

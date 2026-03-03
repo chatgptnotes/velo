@@ -1,217 +1,334 @@
-import { useState } from 'react'
-import { mockPortfolio } from '../lib/mockData'
-import { Plus, Filter, TrendingUp, TrendingDown } from 'lucide-react'
+import React, { useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { 
+  Home, 
+  Briefcase, 
+  Receipt, 
+  Target, 
+  Shield, 
+  FileText, 
+  Settings,
 
-const Portfolio = () => {
-  const [selectedAssetClass, setSelectedAssetClass] = useState('all')
-  const [sortBy, setSortBy] = useState('allocation')
+  Search,
+  TrendingUp,
+  TrendingDown
+} from 'lucide-react'
+import Layout from '../components/Layout'
+import { mockHoldings, formatCurrency } from '../data/mockData'
+import type { Holding } from '../data/mockData'
 
-  const formatCurrency = (amount: number) => {
-    if (amount >= 10000000) {
-      return `₹${(amount / 10000000).toFixed(1)}Cr`
-    } else if (amount >= 100000) {
-      return `₹${(amount / 100000).toFixed(1)}L`
-    } else {
-      return `₹${amount.toLocaleString()}`
-    }
-  }
+const sidebarItems = [
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'Portfolio', href: '/portfolio', icon: Briefcase },
+  { name: 'Tax Center', href: '/tax-center', icon: Receipt },
+  { name: 'Goals', href: '/goals', icon: Target },
+  { name: 'Risk Analysis', href: '/risk-analysis', icon: Shield },
+  { name: 'Documents', href: '/documents', icon: FileText },
+  { name: 'Settings', href: '/settings', icon: Settings },
+]
 
-  const calculatePL = (holding: any) => {
-    const totalValue = holding.quantity * holding.currentPrice
-    const totalCost = holding.quantity * holding.avgCost
-    return totalValue - totalCost
-  }
+const categories = [
+  { id: 'all', name: 'All Assets' },
+  { id: 'equity', name: 'Equity' },
+  { id: 'fixed-income', name: 'Fixed Income' },
+  { id: 'real-estate', name: 'Real Estate' },
+  { id: 'gold', name: 'Gold' },
+  { id: 'alternatives', name: 'Alternatives' },
+  { id: 'cash', name: 'Cash' }
+]
 
-  const calculatePLPercent = (holding: any) => {
-    return ((holding.currentPrice - holding.avgCost) / holding.avgCost) * 100
-  }
+export default function Portfolio() {
+  const location = useLocation()
+  const [activeCategory, setActiveCategory] = useState('all')
+  const [searchQuery, setSearchQuery] = useState('')
+  const [sortConfig, setSortConfig] = useState<{ key: keyof Holding; direction: 'asc' | 'desc' } | null>(null)
 
-  const calculateAllocation = (holding: any) => {
-    const holdingValue = holding.quantity * holding.currentPrice
-    return (holdingValue / mockPortfolio.netWorth) * 100
-  }
-
-  const filteredHoldings = mockPortfolio.holdings.filter(holding => {
-    if (selectedAssetClass === 'all') return true
-    return holding.assetClass === selectedAssetClass
+  const filteredHoldings = mockHoldings.filter(holding => {
+    const matchesCategory = activeCategory === 'all' || holding.category === activeCategory
+    const matchesSearch = holding.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         holding.ticker.toLowerCase().includes(searchQuery.toLowerCase())
+    return matchesCategory && matchesSearch
   })
 
-  const sortedHoldings = [...filteredHoldings].sort((a, b) => {
-    switch (sortBy) {
-      case 'name':
-        return a.name.localeCompare(b.name)
-      case 'pl':
-        return calculatePL(b) - calculatePL(a)
-      case 'allocation':
-        return calculateAllocation(b) - calculateAllocation(a)
-      default:
-        return 0
-    }
-  })
+  const sortedHoldings = React.useMemo(() => {
+    if (!sortConfig) return filteredHoldings
+    
+    return [...filteredHoldings].sort((a, b) => {
+      const aValue = a[sortConfig.key]
+      const bValue = b[sortConfig.key]
+      
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortConfig.direction === 'asc' ? aValue - bValue : bValue - aValue
+      }
+      
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortConfig.direction === 'asc' 
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue)
+      }
+      
+      return 0
+    })
+  }, [filteredHoldings, sortConfig])
 
-  const assetClasses = [
-    { value: 'all', label: 'All Assets' },
-    { value: 'equity', label: 'Equity' },
-    { value: 'fixed_income', label: 'Fixed Income' },
-    { value: 'real_estate', label: 'Real Estate' },
-    { value: 'gold', label: 'Gold' },
-    { value: 'alternatives', label: 'Alternatives' }
-  ]
+  const handleSort = (key: keyof Holding) => {
+    setSortConfig(current => ({
+      key,
+      direction: current?.key === key && current.direction === 'asc' ? 'desc' : 'asc'
+    }))
+  }
+
+  const totalValue = filteredHoldings.reduce((sum, holding) => sum + holding.currentValue, 0)
+  const totalPnL = filteredHoldings.reduce((sum, holding) => sum + holding.pnl, 0)
+  const totalPnLPercent = totalValue > 0 ? (totalPnL / (totalValue - totalPnL)) * 100 : 0
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-primary-text">Portfolio</h1>
-          <p className="text-primary-text-secondary mt-1">Your complete investment holdings and performance</p>
-        </div>
-        <button className="bg-primary-gold text-primary-bg px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors flex items-center">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Investment
-        </button>
-      </div>
-
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
-          <p className="text-sm text-primary-text-secondary mb-1">Total Portfolio Value</p>
-          <p className="text-xl font-bold text-primary-main">{formatCurrency(mockPortfolio.netWorth)}</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
-          <p className="text-sm text-primary-text-secondary mb-1">Total Holdings</p>
-          <p className="text-xl font-bold text-primary-text">{mockPortfolio.holdings.length}</p>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
-          <p className="text-sm text-primary-text-secondary mb-1">Day's P&L</p>
-          <p className="text-xl font-bold text-primary-success flex items-center">
-            <TrendingUp className="w-4 h-4 mr-1" />
-            +₹2,85,000
-          </p>
-        </div>
-        <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
-          <p className="text-sm text-primary-text-secondary mb-1">Overall P&L</p>
-          <p className="text-xl font-bold text-primary-success">+₹4,25,00,000</p>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-          <div className="flex items-center space-x-4">
-            <Filter className="w-5 h-5 text-primary-text-secondary" />
-            <select
-              value={selectedAssetClass}
-              onChange={(e) => setSelectedAssetClass(e.target.value)}
-              className="bg-white border border-primary-border rounded-lg px-3 py-2 text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-main"
-            >
-              {assetClasses.map(asset => (
-                <option key={asset.value} value={asset.value}>{asset.label}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-primary-text-secondary">Sort by:</span>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="bg-white border border-primary-border rounded-lg px-3 py-2 text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-main"
-            >
-              <option value="allocation">Allocation %</option>
-              <option value="name">Name</option>
-              <option value="pl">P&L</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* Holdings Table */}
-      <div className="bg-white rounded-lg border border-primary-border shadow-card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="text-left py-4 px-6 text-sm font-medium text-primary-text-secondary">Name</th>
-                <th className="text-left py-4 px-6 text-sm font-medium text-primary-text-secondary">Ticker</th>
-                <th className="text-right py-4 px-6 text-sm font-medium text-primary-text-secondary">Quantity</th>
-                <th className="text-right py-4 px-6 text-sm font-medium text-primary-text-secondary">Avg Cost</th>
-                <th className="text-right py-4 px-6 text-sm font-medium text-primary-text-secondary">Current Price</th>
-                <th className="text-right py-4 px-6 text-sm font-medium text-primary-text-secondary">P&L</th>
-                <th className="text-right py-4 px-6 text-sm font-medium text-primary-text-secondary">P&L%</th>
-                <th className="text-right py-4 px-6 text-sm font-medium text-primary-text-secondary">Allocation%</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedHoldings.map((holding, index) => {
-                const pl = calculatePL(holding)
-                const plPercent = calculatePLPercent(holding)
-                const allocation = calculateAllocation(holding)
-                const isPositive = pl >= 0
-
-                return (
-                  <tr key={index} className="border-t border-primary-border hover:bg-gray-50">
-                    <td className="py-4 px-6">
-                      <div>
-                        <p className="text-primary-text font-medium">{holding.name}</p>
-                        <p className="text-sm text-primary-text-secondary">{holding.sector}</p>
-                      </div>
-                    </td>
-                    <td className="py-4 px-6 text-primary-text">{holding.ticker}</td>
-                    <td className="py-4 px-6 text-right text-primary-text">
-                      {holding.quantity.toLocaleString()}
-                    </td>
-                    <td className="py-4 px-6 text-right text-primary-text">
-                      ₹{holding.avgCost.toLocaleString()}
-                    </td>
-                    <td className="py-4 px-6 text-right text-primary-text">
-                      ₹{holding.currentPrice.toLocaleString()}
-                    </td>
-                    <td className={`py-4 px-6 text-right font-medium flex items-center justify-end ${
-                      isPositive ? 'text-primary-success' : 'text-primary-danger'
-                    }`}>
-                      {isPositive ? (
-                        <TrendingUp className="w-4 h-4 mr-1" />
-                      ) : (
-                        <TrendingDown className="w-4 h-4 mr-1" />
-                      )}
-                      {isPositive ? '+' : ''}{formatCurrency(Math.abs(pl))}
-                    </td>
-                    <td className={`py-4 px-6 text-right font-medium ${
-                      isPositive ? 'text-primary-success' : 'text-primary-danger'
-                    }`}>
-                      {isPositive ? '+' : ''}{plPercent.toFixed(1)}%
-                    </td>
-                    <td className="py-4 px-6 text-right text-primary-text">
-                      {allocation.toFixed(2)}%
-                    </td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Asset Class Breakdown */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockPortfolio.assetAllocation.map((asset) => (
-          <div key={asset.name} className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="text-lg font-semibold text-primary-text">{asset.name}</h3>
-              <span className="text-primary-main font-medium">{asset.value}%</span>
-            </div>
-            <p className="text-2xl font-bold text-primary-text mb-2">{formatCurrency(asset.amount)}</p>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div 
-                className="bg-primary-main h-2 rounded-full transition-all duration-300"
-                style={{ width: `${asset.value}%` }}
-              />
+    <Layout isAuthenticated={true} showFooter={false}>
+      <div className="flex h-screen bg-background">
+        {/* Sidebar */}
+        <div className="w-64 bg-white shadow-sm border-r border-gray-200">
+          <div className="flex flex-col h-full">
+            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+              <nav className="mt-5 flex-1 px-2 space-y-1">
+                {sidebarItems.map((item) => {
+                  const Icon = item.icon
+                  const isActive = location.pathname === item.href
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className={`${
+                        isActive
+                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
+                    >
+                      <Icon
+                        className={`${
+                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                        } mr-3 h-5 w-5`}
+                      />
+                      {item.name}
+                    </Link>
+                  )
+                })}
+              </nav>
             </div>
           </div>
-        ))}
+        </div>
+
+        {/* Main content */}
+        <div className="flex-1 overflow-auto">
+          <div className="p-8">
+            <div className="mb-8">
+              <h1 className="text-3xl font-bold text-gray-900">Portfolio</h1>
+              <p className="text-gray-600 mt-2">Your complete investment holdings and performance</p>
+            </div>
+
+            {/* Portfolio Summary */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Total Value</p>
+                    <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalValue)}</p>
+                  </div>
+                  <Briefcase className="h-8 w-8 text-primary" />
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Total P&L</p>
+                    <p className={`text-2xl font-bold ${totalPnL >= 0 ? 'text-success' : 'text-danger'}`}>
+                      {totalPnL >= 0 ? '+' : ''}{formatCurrency(totalPnL)}
+                    </p>
+                  </div>
+                  {totalPnL >= 0 ? (
+                    <TrendingUp className="h-8 w-8 text-success" />
+                  ) : (
+                    <TrendingDown className="h-8 w-8 text-danger" />
+                  )}
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-gray-600">Overall Return</p>
+                    <p className={`text-2xl font-bold ${totalPnLPercent >= 0 ? 'text-success' : 'text-danger'}`}>
+                      {totalPnLPercent >= 0 ? '+' : ''}{totalPnLPercent.toFixed(2)}%
+                    </p>
+                  </div>
+                  {totalPnLPercent >= 0 ? (
+                    <TrendingUp className="h-8 w-8 text-success" />
+                  ) : (
+                    <TrendingDown className="h-8 w-8 text-danger" />
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Filters and Search */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* Category Tabs */}
+                <div className="flex flex-wrap gap-2 flex-1">
+                  {categories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setActiveCategory(category.id)}
+                      className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                        activeCategory === category.id
+                          ? 'bg-primary text-white'
+                          : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
+                      }`}
+                    >
+                      {category.name}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Search */}
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Search className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search holdings..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Holdings Table */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('name')}
+                      >
+                        Name
+                      </th>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('ticker')}
+                      >
+                        Ticker
+                      </th>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('quantity')}
+                      >
+                        Quantity
+                      </th>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('avgCost')}
+                      >
+                        Avg Cost
+                      </th>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('currentPrice')}
+                      >
+                        Current Price
+                      </th>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('currentValue')}
+                      >
+                        Current Value
+                      </th>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('pnl')}
+                      >
+                        P&L
+                      </th>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('pnlPercent')}
+                      >
+                        P&L %
+                      </th>
+                      <th 
+                        className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer hover:bg-gray-100"
+                        onClick={() => handleSort('allocation')}
+                      >
+                        Allocation %
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {sortedHoldings.map((holding) => (
+                      <tr key={holding.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{holding.name}</div>
+                          <div className="text-sm text-gray-500 capitalize">{holding.category.replace('-', ' ')}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {holding.ticker}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {holding.quantity.toLocaleString()}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatCurrency(holding.avgCost)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatCurrency(holding.currentPrice)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {formatCurrency(holding.currentValue)}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className={`text-sm font-medium ${holding.pnl >= 0 ? 'text-success' : 'text-danger'}`}>
+                            {holding.pnl >= 0 ? '+' : ''}{formatCurrency(holding.pnl)}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className={`text-sm font-medium ${holding.pnlPercent >= 0 ? 'text-success' : 'text-danger'}`}>
+                            {holding.pnlPercent >= 0 ? '+' : ''}{holding.pnlPercent.toFixed(2)}%
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {holding.allocation.toFixed(2)}%
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Summary Footer */}
+            <div className="mt-6 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div className="flex justify-between items-center text-sm">
+                <span className="text-gray-600">Showing {sortedHoldings.length} of {mockHoldings.length} holdings</span>
+                <div className="flex space-x-6">
+                  <div className="text-gray-600">
+                    Total Value: <span className="font-semibold text-gray-900">{formatCurrency(totalValue)}</span>
+                  </div>
+                  <div className="text-gray-600">
+                    Total P&L: <span className={`font-semibold ${totalPnL >= 0 ? 'text-success' : 'text-danger'}`}>
+                      {totalPnL >= 0 ? '+' : ''}{formatCurrency(totalPnL)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </Layout>
   )
 }
-
-export default Portfolio

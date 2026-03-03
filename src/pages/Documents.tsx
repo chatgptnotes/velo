@@ -1,287 +1,245 @@
-import { useState } from 'react'
-import { mockPortfolio } from '../lib/mockData'
-import { Search, Download, Upload, FileText, Shield, Filter, Calendar } from 'lucide-react'
 
-const Documents = () => {
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [searchTerm, setSearchTerm] = useState('')
+import { Link, useLocation } from 'react-router-dom'
+import { 
+  Home, 
+  Briefcase, 
+  Receipt, 
+  Target, 
+  Shield, 
+  FileText, 
+  Settings,
+  Upload,
+  Download,
+  Eye,
+  Lock,
 
-  const categories = [
-    { value: 'all', label: 'All Documents' },
-    { value: 'insurance', label: 'Insurance' },
-    { value: 'property', label: 'Property' },
-    { value: 'wills', label: 'Wills & Trusts' },
-    { value: 'tax_returns', label: 'Tax Returns' },
-    { value: 'bank_statements', label: 'Bank Statements' },
-    { value: 'investments', label: 'Investments' }
-  ]
+  File
+} from 'lucide-react'
+import Layout from '../components/Layout'
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'insurance':
-        return '🛡️'
-      case 'property':
-        return '🏠'
-      case 'wills':
-        return '📜'
-      case 'tax_returns':
-        return '📊'
-      case 'bank_statements':
-        return '🏦'
-      case 'investments':
-        return '📈'
-      default:
-        return '📄'
-    }
-  }
+const sidebarItems = [
+  { name: 'Dashboard', href: '/dashboard', icon: Home },
+  { name: 'Portfolio', href: '/portfolio', icon: Briefcase },
+  { name: 'Tax Center', href: '/tax-center', icon: Receipt },
+  { name: 'Goals', href: '/goals', icon: Target },
+  { name: 'Risk Analysis', href: '/risk-analysis', icon: Shield },
+  { name: 'Documents', href: '/documents', icon: FileText },
+  { name: 'Settings', href: '/settings', icon: Settings },
+]
 
-  const getCategoryColor = (category: string) => {
-    switch (category) {
-      case 'insurance':
-        return 'text-blue-400'
-      case 'property':
-        return 'text-green-400'
-      case 'wills':
-        return 'text-purple-400'
-      case 'tax_returns':
-        return 'text-yellow-400'
-      case 'bank_statements':
-        return 'text-indigo-400'
-      case 'investments':
-        return 'text-primary-gold'
-      default:
-        return 'text-gray-400'
-    }
-  }
+const documentCategories = [
+  { id: 'insurance', name: 'Insurance', count: 8, icon: Shield },
+  { id: 'property', name: 'Property Documents', count: 12, icon: Home },
+  { id: 'wills', name: 'Wills & Trusts', count: 4, icon: FileText },
+  { id: 'tax', name: 'Tax Returns', count: 6, icon: Receipt },
+  { id: 'bank', name: 'Bank Statements', count: 24, icon: Briefcase },
+  { id: 'investment', name: 'Investment Reports', count: 18, icon: Target },
+]
 
-  const formatFileSize = (sizeStr: string) => {
-    return sizeStr
-  }
+const recentDocuments = [
+  { id: 1, name: 'FY2025-26 ITR Form', type: 'PDF', size: '2.4 MB', date: '2026-03-01', category: 'Tax Returns' },
+  { id: 2, name: 'HDFC Life Insurance Policy', type: 'PDF', size: '1.8 MB', date: '2026-02-28', category: 'Insurance' },
+  { id: 3, name: 'Property Registration - Nagpur', type: 'PDF', size: '3.2 MB', date: '2026-02-25', category: 'Property Documents' },
+  { id: 4, name: 'SBI Account Statement - Feb 2026', type: 'PDF', size: '892 KB', date: '2026-02-24', category: 'Bank Statements' },
+  { id: 5, name: 'PPFAS Fund Statement', type: 'PDF', size: '1.2 MB', date: '2026-02-20', category: 'Investment Reports' },
+]
 
-  const formatDate = (dateStr: string) => {
-    return new Date(dateStr).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    })
-  }
-
-  const filteredDocuments = mockPortfolio.documents.filter(doc => {
-    const matchesCategory = selectedCategory === 'all' || doc.category === selectedCategory
-    const matchesSearch = doc.name.toLowerCase().includes(searchTerm.toLowerCase())
-    return matchesCategory && matchesSearch
-  })
-
-  const getCategoryStats = () => {
-    const stats: { [key: string]: number } = {}
-    mockPortfolio.documents.forEach(doc => {
-      stats[doc.category] = (stats[doc.category] || 0) + 1
-    })
-    return stats
-  }
-
-  const categoryStats = getCategoryStats()
+export default function Documents() {
+  const location = useLocation()
 
   return (
-    <div className="p-6 space-y-6">
-      {/* Page Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-primary-text">Secure Document Vault</h1>
-          <p className="text-primary-text-secondary mt-1">Store and manage your important financial documents securely</p>
-        </div>
-        <button className="bg-primary-gold text-primary-bg px-4 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors flex items-center">
-          <Upload className="w-4 h-4 mr-2" />
-          Upload Document
-        </button>
-      </div>
-
-      {/* Security Notice */}
-      <div className="bg-primary-success bg-opacity-10 border border-primary-success p-4 rounded-lg">
-        <div className="flex items-center">
-          <Shield className="w-5 h-5 text-primary-success mr-3" />
-          <div>
-            <h3 className="font-medium text-primary-success">AES-256 Encrypted Storage</h3>
-            <p className="text-sm text-primary-text-secondary">
-              Your documents are encrypted using bank-grade security and stored with zero-knowledge access.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* Document Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
-          <p className="text-sm text-primary-text-secondary mb-1">Total Documents</p>
-          <p className="text-2xl font-bold text-primary-text">{mockPortfolio.documents.length}</p>
-        </div>
-        <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
-          <p className="text-sm text-primary-text-secondary mb-1">Storage Used</p>
-          <p className="text-2xl font-bold text-primary-gold">12.8 MB</p>
-        </div>
-        <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
-          <p className="text-sm text-primary-text-secondary mb-1">Categories</p>
-          <p className="text-2xl font-bold text-primary-text">{Object.keys(categoryStats).length}</p>
-        </div>
-        <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
-          <p className="text-sm text-primary-text-secondary mb-1">Last Upload</p>
-          <p className="text-2xl font-bold text-primary-success">Feb 28</p>
-        </div>
-      </div>
-
-      {/* Filters and Search */}
-      <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
-          <div className="flex items-center space-x-4">
-            <Filter className="w-5 h-5 text-primary-text-secondary" />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="bg-primary-bg border border-gray-600 rounded-lg px-3 py-2 text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-gold"
-            >
-              {categories.map(category => (
-                <option key={category.value} value={category.value}>
-                  {category.label} {categoryStats[category.value] ? `(${categoryStats[category.value]})` : ''}
-                </option>
-              ))}
-            </select>
-          </div>
-          
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-primary-text-secondary" />
-            <input
-              type="text"
-              placeholder="Search documents..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2 bg-primary-bg border border-gray-600 rounded-lg text-primary-text placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-gold"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Category Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {categories.slice(1).map(category => (
-          <button
-            key={category.value}
-            onClick={() => setSelectedCategory(category.value)}
-            className={`p-4 rounded-lg border-2 transition-all ${
-              selectedCategory === category.value
-                ? 'border-primary-gold bg-primary-gold bg-opacity-10'
-                : 'border-gray-700 bg-primary-card hover:border-gray-600'
-            }`}
-          >
-            <div className="text-center">
-              <div className="text-2xl mb-2">{getCategoryIcon(category.value)}</div>
-              <p className="text-sm font-medium text-primary-text">{category.label}</p>
-              <p className="text-xs text-primary-text-secondary">
-                {categoryStats[category.value] || 0} files
-              </p>
+    <Layout isAuthenticated={true} showFooter={false}>
+      <div className="flex h-screen bg-background">
+        {/* Sidebar */}
+        <div className="w-64 bg-white shadow-sm border-r border-gray-200">
+          <div className="flex flex-col h-full">
+            <div className="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
+              <nav className="mt-5 flex-1 px-2 space-y-1">
+                {sidebarItems.map((item) => {
+                  const Icon = item.icon
+                  const isActive = location.pathname === item.href
+                  return (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className={`${
+                        isActive
+                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
+                    >
+                      <Icon
+                        className={`${
+                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                        } mr-3 h-5 w-5`}
+                      />
+                      {item.name}
+                    </Link>
+                  )
+                })}
+              </nav>
             </div>
-          </button>
-        ))}
-      </div>
-
-      {/* Documents List */}
-      <div className="bg-primary-card rounded-lg border border-gray-700">
-        <div className="p-6 border-b border-gray-700">
-          <h3 className="text-lg font-semibold text-primary-text">
-            {selectedCategory === 'all' ? 'All Documents' : categories.find(c => c.value === selectedCategory)?.label}
-            <span className="text-primary-text-secondary ml-2">({filteredDocuments.length})</span>
-          </h3>
+          </div>
         </div>
-        
-        <div className="divide-y divide-gray-700">
-          {filteredDocuments.length === 0 ? (
-            <div className="p-8 text-center">
-              <FileText className="w-12 h-12 text-primary-text-secondary mx-auto mb-4" />
-              <p className="text-primary-text-secondary">No documents found matching your criteria</p>
+
+        {/* Main content */}
+        <div className="flex-1 overflow-auto">
+          <div className="p-8">
+            <div className="mb-8 flex justify-between items-center">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">Documents</h1>
+                <p className="text-gray-600 mt-2">Securely store and manage your important financial documents</p>
+              </div>
+              <button className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors flex items-center space-x-2">
+                <Upload className="h-5 w-5" />
+                <span>Upload Document</span>
+              </button>
             </div>
-          ) : (
-            filteredDocuments.map((document, index) => (
-              <div key={index} className="p-6 hover:bg-primary-bg hover:bg-opacity-50 transition-colors">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className={`text-2xl ${getCategoryColor(document.category)}`}>
-                      {getCategoryIcon(document.category)}
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-primary-text mb-1">{document.name}</h4>
-                      <div className="flex items-center space-x-4 text-sm text-primary-text-secondary">
-                        <span className="capitalize">{document.category.replace('_', ' ')}</span>
-                        <span>•</span>
-                        <span>{formatFileSize(document.size)}</span>
-                        <span>•</span>
-                        <div className="flex items-center">
-                          <Calendar className="w-3 h-3 mr-1" />
-                          <span>{formatDate(document.uploadedAt)}</span>
-                        </div>
+
+            {/* Security Banner */}
+            <div className="bg-accent/5 border border-accent/20 rounded-xl p-6 mb-8">
+              <div className="flex items-center space-x-3">
+                <Lock className="h-6 w-6 text-accent" />
+                <div>
+                  <h3 className="text-lg font-semibold text-gray-900">AES-256 Encryption</h3>
+                  <p className="text-sm text-gray-600">All your documents are encrypted with bank-grade security and stored in compliance with financial regulations.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Document Categories */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {documentCategories.map((category) => {
+                const Icon = category.icon
+                return (
+                  <div key={category.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex items-center space-x-4">
+                      <div className="p-3 bg-primary/10 rounded-lg">
+                        <Icon className="h-8 w-8 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900">{category.name}</h3>
+                        <p className="text-sm text-gray-600">{category.count} documents</p>
                       </div>
                     </div>
                   </div>
-                  
-                  <div className="flex items-center space-x-2">
-                    <button className="p-2 text-primary-text-secondary hover:text-primary-gold transition-colors">
-                      <Download className="w-4 h-4" />
+                )
+              })}
+            </div>
+
+            {/* Recent Documents */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-lg font-semibold text-gray-900">Recent Documents</h3>
+              </div>
+              
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Document Name
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Category
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Type
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Size
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Date
+                      </th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {recentDocuments.map((doc) => (
+                      <tr key={doc.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center">
+                            <File className="h-5 w-5 text-gray-400 mr-3" />
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">{doc.name}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                            {doc.category}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {doc.type}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {doc.size}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                          {new Date(doc.date).toLocaleDateString('en-IN')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          <div className="flex space-x-2">
+                            <button className="text-primary hover:text-primary-600">
+                              <Eye className="h-4 w-4" />
+                            </button>
+                            <button className="text-gray-400 hover:text-gray-600">
+                              <Download className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="px-6 py-4 border-t border-gray-200">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm text-gray-600">
+                    Showing 5 of 72 documents
+                  </div>
+                  <div className="flex space-x-2">
+                    <button className="px-3 py-1 text-sm font-medium text-gray-600 bg-gray-100 rounded hover:bg-gray-200">
+                      Previous
                     </button>
-                    <button className="px-3 py-1.5 bg-primary-gold text-primary-bg rounded text-sm font-medium hover:bg-opacity-90 transition-colors">
-                      View
+                    <button className="px-3 py-1 text-sm font-medium text-white bg-primary rounded hover:bg-primary-600">
+                      Next
                     </button>
                   </div>
                 </div>
               </div>
-            ))
-          )}
-        </div>
-      </div>
+            </div>
 
-      {/* Upload Zone */}
-      <div className="bg-primary-card p-8 rounded-lg border-2 border-dashed border-gray-600 text-center">
-        <Upload className="w-12 h-12 text-primary-text-secondary mx-auto mb-4" />
-        <h3 className="text-lg font-medium text-primary-text mb-2">Upload New Documents</h3>
-        <p className="text-primary-text-secondary mb-4">
-          Drag and drop files here, or click to select
-        </p>
-        <div className="flex items-center justify-center space-x-4">
-          <button className="bg-primary-gold text-primary-bg px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors">
-            Choose Files
-          </button>
-          <span className="text-sm text-primary-text-secondary">
-            Supports: PDF, DOCX, PNG, JPG (Max 10MB)
-          </span>
-        </div>
-      </div>
-
-      {/* Recent Activity */}
-      <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
-        <h3 className="text-lg font-semibold text-primary-text mb-4">Recent Activity</h3>
-        <div className="space-y-3">
-          <div className="flex items-center justify-between py-2">
-            <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-primary-success rounded-full"></div>
-              <span className="text-primary-text">Mutual Fund Statements uploaded</span>
+            {/* Document Stats */}
+            <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
+                <div className="text-2xl font-bold text-primary mb-1">72</div>
+                <div className="text-sm text-gray-600">Total Documents</div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
+                <div className="text-2xl font-bold text-success mb-1">245 MB</div>
+                <div className="text-sm text-gray-600">Storage Used</div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
+                <div className="text-2xl font-bold text-secondary mb-1">6</div>
+                <div className="text-sm text-gray-600">Categories</div>
+              </div>
+              
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
+                <div className="text-2xl font-bold text-accent mb-1">5GB</div>
+                <div className="text-sm text-gray-600">Storage Limit</div>
+              </div>
             </div>
-            <span className="text-sm text-primary-text-secondary">2 days ago</span>
-          </div>
-          <div className="flex items-center justify-between py-2">
-            <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-primary-gold rounded-full"></div>
-              <span className="text-primary-text">ITR 2024-25 downloaded</span>
-            </div>
-            <span className="text-sm text-primary-text-secondary">5 days ago</span>
-          </div>
-          <div className="flex items-center justify-between py-2">
-            <div className="flex items-center space-x-3">
-              <div className="w-2 h-2 bg-primary-success rounded-full"></div>
-              <span className="text-primary-text">SBI Bank Statement uploaded</span>
-            </div>
-            <span className="text-sm text-primary-text-secondary">1 week ago</span>
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   )
 }
-
-export default Documents
