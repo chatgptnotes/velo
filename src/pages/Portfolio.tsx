@@ -74,36 +74,36 @@ const Portfolio = () => {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
+        <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
           <p className="text-sm text-primary-text-secondary mb-1">Total Portfolio Value</p>
-          <p className="text-xl font-bold text-primary-gold">{formatCurrency(mockPortfolio.netWorth)}</p>
+          <p className="text-xl font-bold text-primary-main">{formatCurrency(mockPortfolio.netWorth)}</p>
         </div>
-        <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
+        <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
           <p className="text-sm text-primary-text-secondary mb-1">Total Holdings</p>
           <p className="text-xl font-bold text-primary-text">{mockPortfolio.holdings.length}</p>
         </div>
-        <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
+        <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
           <p className="text-sm text-primary-text-secondary mb-1">Day's P&L</p>
           <p className="text-xl font-bold text-primary-success flex items-center">
             <TrendingUp className="w-4 h-4 mr-1" />
             +₹2,85,000
           </p>
         </div>
-        <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
+        <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
           <p className="text-sm text-primary-text-secondary mb-1">Overall P&L</p>
           <p className="text-xl font-bold text-primary-success">+₹4,25,00,000</p>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-primary-card p-4 rounded-lg border border-gray-700">
+      <div className="bg-white p-4 rounded-lg border border-primary-border shadow-card">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
           <div className="flex items-center space-x-4">
             <Filter className="w-5 h-5 text-primary-text-secondary" />
             <select
               value={selectedAssetClass}
               onChange={(e) => setSelectedAssetClass(e.target.value)}
-              className="bg-primary-bg border border-gray-600 rounded-lg px-3 py-2 text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-gold"
+              className="bg-white border border-primary-border rounded-lg px-3 py-2 text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-main"
             >
               {assetClasses.map(asset => (
                 <option key={asset.value} value={asset.value}>{asset.label}</option>
@@ -115,7 +115,7 @@ const Portfolio = () => {
             <select
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value)}
-              className="bg-primary-bg border border-gray-600 rounded-lg px-3 py-2 text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-gold"
+              className="bg-white border border-primary-border rounded-lg px-3 py-2 text-primary-text focus:outline-none focus:ring-2 focus:ring-primary-main"
             >
               <option value="allocation">Allocation %</option>
               <option value="name">Name</option>
@@ -126,10 +126,10 @@ const Portfolio = () => {
       </div>
 
       {/* Holdings Table */}
-      <div className="bg-primary-card rounded-lg border border-gray-700 overflow-hidden">
+      <div className="bg-white rounded-lg border border-primary-border shadow-card overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-primary-bg">
+            <thead className="bg-gray-50">
               <tr>
                 <th className="text-left py-4 px-6 text-sm font-medium text-primary-text-secondary">Name</th>
                 <th className="text-left py-4 px-6 text-sm font-medium text-primary-text-secondary">Ticker</th>
@@ -149,7 +149,7 @@ const Portfolio = () => {
                 const isPositive = pl >= 0
 
                 return (
-                  <tr key={index} className="border-t border-gray-700 hover:bg-primary-bg hover:bg-opacity-50">
+                  <tr key={index} className="border-t border-primary-border hover:bg-gray-50">
                     <td className="py-4 px-6">
                       <div>
                         <p className="text-primary-text font-medium">{holding.name}</p>
@@ -195,15 +195,15 @@ const Portfolio = () => {
       {/* Asset Class Breakdown */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {mockPortfolio.assetAllocation.map((asset) => (
-          <div key={asset.name} className="bg-primary-card p-6 rounded-lg border border-gray-700">
+          <div key={asset.name} className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-lg font-semibold text-primary-text">{asset.name}</h3>
-              <span className="text-primary-gold font-medium">{asset.value}%</span>
+              <span className="text-primary-main font-medium">{asset.value}%</span>
             </div>
             <p className="text-2xl font-bold text-primary-text mb-2">{formatCurrency(asset.amount)}</p>
-            <div className="w-full bg-gray-700 rounded-full h-2">
+            <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
-                className="bg-primary-gold h-2 rounded-full transition-all duration-300"
+                className="bg-primary-main h-2 rounded-full transition-all duration-300"
                 style={{ width: `${asset.value}%` }}
               />
             </div>

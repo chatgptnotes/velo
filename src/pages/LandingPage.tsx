@@ -61,17 +61,17 @@ const LandingPage = () => {
   ]
 
   return (
-    <div className="min-h-screen bg-primary-bg text-primary-text">
+    <div className="min-h-screen bg-white text-primary-text">
       {/* Header */}
-      <header className="border-b border-gray-700">
+      <header className="border-b border-primary-border bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
-              <h1 className="text-3xl font-bold text-primary-gold">Velo</h1>
+              <h1 className="text-3xl font-bold text-primary-main">Velo</h1>
             </div>
             <Link
               to="/login"
-              className="bg-primary-gold text-primary-bg px-6 py-2 rounded-lg font-medium hover:bg-opacity-90 transition-colors"
+              className="bg-primary-main text-white px-6 py-2 rounded-lg font-medium hover:bg-primary-secondary transition-colors"
             >
               Client Access
             </Link>
@@ -80,10 +80,10 @@ const LandingPage = () => {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 lg:py-32">
+      <section className="py-20 lg:py-32 bg-gradient-to-br from-primary-bg to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl lg:text-7xl font-bold mb-6 leading-tight">
-            <span className="text-primary-gold">Velo</span>
+            <span className="text-primary-main">Velo</span>
             <br />
             <span className="text-primary-text">Private Wealth Management</span>
           </h1>
@@ -92,7 +92,7 @@ const LandingPage = () => {
           </p>
           <Link
             to="/login"
-            className="inline-block bg-primary-gold text-primary-bg px-8 py-4 rounded-lg text-lg font-semibold hover:bg-opacity-90 transition-colors"
+            className="inline-block bg-primary-main text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-primary-secondary transition-colors shadow-lg"
           >
             Request Access
           </Link>
@@ -100,7 +100,7 @@ const LandingPage = () => {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-primary-card">
+      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-primary-text mb-4">
@@ -113,9 +113,9 @@ const LandingPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-primary-gold rounded-full flex items-center justify-center mx-auto mb-6">
-                  <feature.icon className="w-8 h-8 text-primary-bg" />
+              <div key={index} className="text-center bg-white p-6 rounded-lg shadow-card border border-primary-border">
+                <div className="w-16 h-16 bg-primary-main rounded-full flex items-center justify-center mx-auto mb-6">
+                  <feature.icon className="w-8 h-8 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-primary-text mb-3">
                   {feature.title}
@@ -130,7 +130,7 @@ const LandingPage = () => {
       </section>
 
       {/* Trust Indicators */}
-      <section className="py-16 border-y border-gray-700">
+      <section className="py-16 border-y border-primary-border bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
             {trustIndicators.map((indicator, index) => (
@@ -144,7 +144,7 @@ const LandingPage = () => {
       </section>
 
       {/* Testimonials */}
-      <section className="py-20">
+      <section className="py-20 bg-primary-bg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl lg:text-4xl font-bold text-primary-text mb-4">
@@ -154,7 +154,7 @@ const LandingPage = () => {
 
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-primary-card p-6 rounded-lg">
+              <div key={index} className="bg-white p-6 rounded-lg shadow-card border border-primary-border">
                 <div className="flex mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="w-5 h-5 text-primary-gold fill-current" />
@@ -172,17 +172,17 @@ const LandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary-card">
+      <section className="py-20 bg-primary-main text-white">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl lg:text-4xl font-bold text-primary-text mb-6">
+          <h2 className="text-3xl lg:text-4xl font-bold mb-6">
             Ready to Elevate Your Wealth Management?
           </h2>
-          <p className="text-lg text-primary-text-secondary mb-8">
+          <p className="text-lg opacity-90 mb-8">
             Join an exclusive community of discerning investors who trust Velo with their most important financial decisions.
           </p>
           <Link
             to="/login"
-            className="inline-block bg-primary-gold text-primary-bg px-8 py-4 rounded-lg text-lg font-semibold hover:bg-opacity-90 transition-colors"
+            className="inline-block bg-white text-primary-main px-8 py-4 rounded-lg text-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg"
           >
             Request Access
           </Link>
@@ -190,10 +190,10 @@ const LandingPage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-gray-700 py-8">
+      <footer className="border-t border-primary-border py-8 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <p className="text-primary-text-secondary text-sm">
+            <p className="text-primary-text-muted text-sm">
               drmhope.com | A Bettroi Product | v1.0.0
             </p>
           </div>

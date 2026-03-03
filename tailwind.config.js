@@ -8,18 +8,24 @@ export default {
     extend: {
       colors: {
         primary: {
-          bg: '#0F1419', // deep dark
-          card: '#1A1F2E', // dark navy
-          gold: '#D4AF37', // classic gold
-          silver: '#C0C0C0', // silver
-          success: '#00C853', // green
-          danger: '#FF1744', // red
-          text: '#F5F5F5', // primary text
-          'text-secondary': '#9E9E9E', // secondary text
+          bg: '#F8FAFC', // light page background
+          card: '#FFFFFF', // white cards
+          main: '#1B4332', // deep forest green
+          secondary: '#2D6A4F', // medium green
+          gold: '#B8860B', // dark goldenrod
+          success: '#059669', // green
+          danger: '#DC2626', // red
+          text: '#1E293B', // primary text
+          'text-secondary': '#475569', // secondary text
+          'text-muted': '#94A3B8', // muted text
+          border: '#E2E8F0', // borders
         }
       },
       fontFamily: {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        'card': '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
       },
     },
   },

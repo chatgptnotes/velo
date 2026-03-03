@@ -17,7 +17,7 @@ const Dashboard = () => {
     return `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
   }
 
-  const COLORS = ['#D4AF37', '#C0C0C0', '#8B7355', '#6B5B95', '#88D8B0', '#FFAAA5']
+  const COLORS = ['#1B4332', '#2D6A4F', '#B8860B', '#3282B8', '#059669', '#6366F1']
 
   return (
     <div className="p-6 space-y-8">
@@ -34,7 +34,7 @@ const Dashboard = () => {
       </div>
 
       {/* Net Worth Overview */}
-      <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
+      <div className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-primary-text">Net Worth</h2>
           <div className="flex items-center text-primary-success">
@@ -42,7 +42,7 @@ const Dashboard = () => {
             <span className="text-sm font-medium">{formatPercent(mockPortfolio.monthlyReturn)}</span>
           </div>
         </div>
-        <div className="text-4xl font-bold text-primary-gold mb-2">
+        <div className="text-4xl font-bold text-primary-main mb-2">
           {formatCurrency(mockPortfolio.netWorth)}
         </div>
         <p className="text-primary-text-secondary">
@@ -52,10 +52,10 @@ const Dashboard = () => {
 
       {/* Quick Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
+        <div className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-primary-gold bg-opacity-10 rounded-lg flex items-center justify-center">
-              <DollarSign className="w-6 h-6 text-primary-gold" />
+            <div className="w-12 h-12 bg-primary-main bg-opacity-10 rounded-lg flex items-center justify-center">
+              <DollarSign className="w-6 h-6 text-primary-main" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-primary-text-secondary">Total AUM</p>
@@ -64,7 +64,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
+        <div className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
           <div className="flex items-center">
             <div className="w-12 h-12 bg-primary-success bg-opacity-10 rounded-lg flex items-center justify-center">
               <Percent className="w-6 h-6 text-primary-success" />
@@ -76,10 +76,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
+        <div className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
           <div className="flex items-center">
-            <div className="w-12 h-12 bg-primary-silver bg-opacity-10 rounded-lg flex items-center justify-center">
-              <Calculator className="w-6 h-6 text-primary-silver" />
+            <div className="w-12 h-12 bg-primary-gold bg-opacity-10 rounded-lg flex items-center justify-center">
+              <Calculator className="w-6 h-6 text-primary-gold" />
             </div>
             <div className="ml-4">
               <p className="text-sm font-medium text-primary-text-secondary">Tax Saved YTD</p>
@@ -92,7 +92,7 @@ const Dashboard = () => {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Asset Allocation */}
-        <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
+        <div className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
           <h3 className="text-lg font-semibold text-primary-text mb-4">Asset Allocation</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -113,10 +113,11 @@ const Dashboard = () => {
                 <Tooltip 
                   formatter={(value) => [`${value}%`, 'Allocation']}
                   contentStyle={{
-                    backgroundColor: '#1A1F2E',
-                    border: '1px solid #374151',
+                    backgroundColor: 'white',
+                    border: '1px solid #E2E8F0',
                     borderRadius: '8px',
-                    color: '#F5F5F5'
+                    color: '#1E293B',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }}
                 />
               </PieChart>
@@ -137,29 +138,30 @@ const Dashboard = () => {
         </div>
 
         {/* Portfolio Performance */}
-        <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
+        <div className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
           <h3 className="text-lg font-semibold text-primary-text mb-4">Portfolio Performance</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={performanceData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                <XAxis dataKey="period" stroke="#9E9E9E" />
-                <YAxis stroke="#9E9E9E" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#E2E8F0" />
+                <XAxis dataKey="period" stroke="#475569" />
+                <YAxis stroke="#475569" />
                 <Tooltip 
                   formatter={(value) => [`${value}%`, 'Return']}
                   contentStyle={{
-                    backgroundColor: '#1A1F2E',
-                    border: '1px solid #374151',
+                    backgroundColor: 'white',
+                    border: '1px solid #E2E8F0',
                     borderRadius: '8px',
-                    color: '#F5F5F5'
+                    color: '#1E293B',
+                    boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                   }}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="value" 
-                  stroke="#D4AF37" 
-                  strokeWidth={2}
-                  dot={{ fill: '#D4AF37', strokeWidth: 2, r: 4 }}
+                  stroke="#1B4332" 
+                  strokeWidth={3}
+                  dot={{ fill: '#1B4332', strokeWidth: 2, r: 4 }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -170,14 +172,14 @@ const Dashboard = () => {
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Activity */}
-        <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
+        <div className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold text-primary-text">Recent Activity</h3>
-            <Activity className="w-5 h-5 text-primary-gold" />
+            <Activity className="w-5 h-5 text-primary-main" />
           </div>
           <div className="space-y-3">
             {mockPortfolio.recentTransactions.slice(0, 5).map((transaction, index) => (
-              <div key={index} className="flex items-center justify-between py-2 border-b border-gray-700 last:border-0">
+              <div key={index} className="flex items-center justify-between py-2 border-b border-primary-border last:border-0">
                 <div>
                   <p className="text-primary-text font-medium">{transaction.description}</p>
                   <p className="text-sm text-primary-text-secondary">{transaction.date}</p>
@@ -194,7 +196,7 @@ const Dashboard = () => {
         </div>
 
         {/* Market Pulse */}
-        <div className="bg-primary-card p-6 rounded-lg border border-gray-700">
+        <div className="bg-white p-6 rounded-lg border border-primary-border shadow-card">
           <h3 className="text-lg font-semibold text-primary-text mb-4">Market Pulse</h3>
           <div className="space-y-3">
             {mockPortfolio.marketPulse.map((market, index) => (
