@@ -73,13 +73,13 @@ export default function Dashboard() {
                       to={item.href}
                       className={`${
                         isActive
-                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          ? 'bg-blue-50 border-r-2 border-[#0F4C75] text-[#0F4C75]'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
                     >
                       <Icon
                         className={`${
-                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                          isActive ? 'text-[#0F4C75]' : 'text-gray-400 group-hover:text-gray-500'
                         } mr-3 h-5 w-5`}
                       />
                       {item.name}
@@ -126,8 +126,8 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-primary-50 rounded-lg">
-                    <Briefcase className="h-6 w-6 text-primary" />
+                  <div className="p-2 bg-blue-50 rounded-lg">
+                    <Briefcase className="h-6 w-6 text-[#0F4C75]" />
                   </div>
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Total AUM</p>
@@ -150,24 +150,24 @@ export default function Dashboard() {
 
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-accent/10 rounded-lg">
-                    <PieChart className="h-6 w-6 text-accent" />
+                  <div className="p-2 bg-[#00B4D8]/10 rounded-lg">
+                    <PieChart className="h-6 w-6 text-[#00B4D8]" />
                   </div>
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Annual Yield</p>
-                    <p className="text-lg font-semibold text-accent">+{mockPortfolioData.annualYield}%</p>
+                    <p className="text-lg font-semibold text-[#00B4D8]">+{mockPortfolioData.annualYield}%</p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-secondary/10 rounded-lg">
-                    <Receipt className="h-6 w-6 text-secondary" />
+                  <div className="p-2 bg-[#3282B8]/10 rounded-lg">
+                    <Receipt className="h-6 w-6 text-[#3282B8]" />
                   </div>
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Tax Saved YTD</p>
-                    <p className="text-lg font-semibold text-secondary">{formatCurrency(mockPortfolioData.taxSavedYTD)}</p>
+                    <p className="text-lg font-semibold text-[#3282B8]">{formatCurrency(mockPortfolioData.taxSavedYTD)}</p>
                   </div>
                 </div>
               </div>
@@ -181,10 +181,10 @@ export default function Dashboard() {
                 <div className="flex items-center space-x-8">
                   <div className="w-48 h-48 flex items-center justify-center">
                     <div className="relative w-32 h-32">
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary via-secondary to-accent opacity-20"></div>
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-r from-[#0F4C75] via-[#3282B8] to-[#00B4D8] opacity-20"></div>
                       <div className="absolute inset-4 rounded-full bg-white flex items-center justify-center">
                         <div className="text-center">
-                          <div className="text-lg font-bold text-primary">35%</div>
+                          <div className="text-lg font-bold text-[#0F4C75]">35%</div>
                           <div className="text-xs text-gray-600">Equity</div>
                         </div>
                       </div>
@@ -221,8 +221,8 @@ export default function Dashboard() {
                         onClick={() => setSelectedPeriod(period)}
                         className={`px-3 py-1 text-sm font-medium rounded ${
                           selectedPeriod === period
-                            ? 'bg-primary text-white'
-                            : 'text-gray-600 hover:text-primary'
+                            ? 'bg-[#0F4C75] text-white'
+                            : 'text-gray-600 hover:text-[#0F4C75]'
                         }`}
                       >
                         {period}

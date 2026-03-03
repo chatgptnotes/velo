@@ -99,13 +99,13 @@ export default function Portfolio() {
                       to={item.href}
                       className={`${
                         isActive
-                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          ? 'bg-blue-50 border-r-2 border-[#0F4C75] text-[#0F4C75]'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
                     >
                       <Icon
                         className={`${
-                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                          isActive ? 'text-[#0F4C75]' : 'text-gray-400 group-hover:text-gray-500'
                         } mr-3 h-5 w-5`}
                       />
                       {item.name}
@@ -133,7 +133,7 @@ export default function Portfolio() {
                     <p className="text-sm font-medium text-gray-600">Total Value</p>
                     <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalValue)}</p>
                   </div>
-                  <Briefcase className="h-8 w-8 text-primary" />
+                  <Briefcase className="h-8 w-8 text-[#0F4C75]" />
                 </div>
               </div>
 
@@ -181,7 +181,7 @@ export default function Portfolio() {
                       onClick={() => setActiveCategory(category.id)}
                       className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
                         activeCategory === category.id
-                          ? 'bg-primary text-white'
+                          ? 'bg-[#0F4C75] text-white'
                           : 'text-gray-600 bg-gray-100 hover:bg-gray-200'
                       }`}
                     >

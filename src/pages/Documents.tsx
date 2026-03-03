@@ -64,13 +64,13 @@ export default function Documents() {
                       to={item.href}
                       className={`${
                         isActive
-                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          ? 'bg-blue-50 border-r-2 border-[#0F4C75] text-[#0F4C75]'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
                     >
                       <Icon
                         className={`${
-                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                          isActive ? 'text-[#0F4C75]' : 'text-gray-400 group-hover:text-gray-500'
                         } mr-3 h-5 w-5`}
                       />
                       {item.name}
@@ -90,16 +90,16 @@ export default function Documents() {
                 <h1 className="text-3xl font-bold text-gray-900">Documents</h1>
                 <p className="text-gray-600 mt-2">Securely store and manage your important financial documents</p>
               </div>
-              <button className="bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary-600 transition-colors flex items-center space-x-2">
+              <button className="bg-[#0F4C75] text-white px-6 py-3 rounded-lg font-medium hover:bg-[#093049] transition-colors flex items-center space-x-2">
                 <Upload className="h-5 w-5" />
                 <span>Upload Document</span>
               </button>
             </div>
 
             {/* Security Banner */}
-            <div className="bg-accent/5 border border-accent/20 rounded-xl p-6 mb-8">
+            <div className="bg-[#00B4D8]/5 border border-accent/20 rounded-xl p-6 mb-8">
               <div className="flex items-center space-x-3">
-                <Lock className="h-6 w-6 text-accent" />
+                <Lock className="h-6 w-6 text-[#00B4D8]" />
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">AES-256 Encryption</h3>
                   <p className="text-sm text-gray-600">All your documents are encrypted with bank-grade security and stored in compliance with financial regulations.</p>
@@ -114,8 +114,8 @@ export default function Documents() {
                 return (
                   <div key={category.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex items-center space-x-4">
-                      <div className="p-3 bg-primary/10 rounded-lg">
-                        <Icon className="h-8 w-8 text-primary" />
+                      <div className="p-3 bg-[#0F4C75]/10 rounded-lg">
+                        <Icon className="h-8 w-8 text-[#0F4C75]" />
                       </div>
                       <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900">{category.name}</h3>
@@ -169,7 +169,7 @@ export default function Documents() {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#0F4C75]/10 text-[#0F4C75]">
                             {doc.category}
                           </span>
                         </td>
@@ -184,7 +184,7 @@ export default function Documents() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           <div className="flex space-x-2">
-                            <button className="text-primary hover:text-primary-600">
+                            <button className="text-[#0F4C75] hover:text-[#093049]">
                               <Eye className="h-4 w-4" />
                             </button>
                             <button className="text-gray-400 hover:text-gray-600">
@@ -207,7 +207,7 @@ export default function Documents() {
                     <button className="px-3 py-1 text-sm font-medium text-gray-600 bg-gray-100 rounded hover:bg-gray-200">
                       Previous
                     </button>
-                    <button className="px-3 py-1 text-sm font-medium text-white bg-primary rounded hover:bg-primary-600">
+                    <button className="px-3 py-1 text-sm font-medium text-white bg-[#0F4C75] rounded hover:bg-[#093049]">
                       Next
                     </button>
                   </div>
@@ -218,7 +218,7 @@ export default function Documents() {
             {/* Document Stats */}
             <div className="mt-8 grid grid-cols-1 md:grid-cols-4 gap-6">
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
-                <div className="text-2xl font-bold text-primary mb-1">72</div>
+                <div className="text-2xl font-bold text-[#0F4C75] mb-1">72</div>
                 <div className="text-sm text-gray-600">Total Documents</div>
               </div>
               
@@ -228,12 +228,12 @@ export default function Documents() {
               </div>
               
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
-                <div className="text-2xl font-bold text-secondary mb-1">6</div>
+                <div className="text-2xl font-bold text-[#3282B8] mb-1">6</div>
                 <div className="text-sm text-gray-600">Categories</div>
               </div>
               
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 text-center">
-                <div className="text-2xl font-bold text-accent mb-1">5GB</div>
+                <div className="text-2xl font-bold text-[#00B4D8] mb-1">5GB</div>
                 <div className="text-sm text-gray-600">Storage Limit</div>
               </div>
             </div>

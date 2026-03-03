@@ -45,13 +45,13 @@ export default function RiskAnalysis() {
                       to={item.href}
                       className={`${
                         isActive
-                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          ? 'bg-blue-50 border-r-2 border-[#0F4C75] text-[#0F4C75]'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
                     >
                       <Icon
                         className={`${
-                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                          isActive ? 'text-[#0F4C75]' : 'text-gray-400 group-hover:text-gray-500'
                         } mr-3 h-5 w-5`}
                       />
                       {item.name}
@@ -117,12 +117,12 @@ export default function RiskAnalysis() {
 
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Activity className="h-6 w-6 text-primary" />
+                  <div className="p-2 bg-[#0F4C75]/10 rounded-lg">
+                    <Activity className="h-6 w-6 text-[#0F4C75]" />
                   </div>
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Volatility (1Y)</p>
-                    <p className="text-lg font-semibold text-primary">12.4%</p>
+                    <p className="text-lg font-semibold text-[#0F4C75]">12.4%</p>
                   </div>
                 </div>
               </div>
@@ -235,8 +235,8 @@ export default function RiskAnalysis() {
                   </div>
                 </div>
 
-                <div className="flex items-start space-x-3 p-4 bg-primary/5 border border-primary/20 rounded-lg">
-                  <Shield className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <div className="flex items-start space-x-3 p-4 bg-[#0F4C75]/5 border border-[#0F4C75]/20 rounded-lg">
+                  <Shield className="h-5 w-5 text-[#0F4C75] mt-0.5 flex-shrink-0" />
                   <div>
                     <h4 className="text-sm font-medium text-gray-900">Enhance Fixed Income Allocation</h4>
                     <p className="text-sm text-gray-600 mt-1">

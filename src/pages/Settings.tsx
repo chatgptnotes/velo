@@ -65,13 +65,13 @@ export default function Settings() {
                       to={item.href}
                       className={`${
                         isActive
-                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          ? 'bg-blue-50 border-r-2 border-[#0F4C75] text-[#0F4C75]'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
                     >
                       <Icon
                         className={`${
-                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                          isActive ? 'text-[#0F4C75]' : 'text-gray-400 group-hover:text-gray-500'
                         } mr-3 h-5 w-5`}
                       />
                       {item.name}
@@ -103,7 +103,7 @@ export default function Settings() {
                         onClick={() => setActiveTab(tab.id)}
                         className={`${
                           activeTab === tab.id
-                            ? 'border-primary text-primary'
+                            ? 'border-[#0F4C75] text-[#0F4C75]'
                             : 'border-transparent text-gray-500 hover:text-gray-700'
                         } flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm`}
                       >
@@ -123,10 +123,10 @@ export default function Settings() {
                     
                     <div className="space-y-6">
                       <div className="flex items-center space-x-6">
-                        <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
-                          <User className="h-10 w-10 text-primary" />
+                        <div className="w-20 h-20 bg-[#0F4C75]/10 rounded-full flex items-center justify-center">
+                          <User className="h-10 w-10 text-[#0F4C75]" />
                         </div>
-                        <button className="px-4 py-2 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-colors">
+                        <button className="px-4 py-2 bg-[#0F4C75]/10 text-[#0F4C75] rounded-lg hover:bg-primary/20 transition-colors">
                           Change Photo
                         </button>
                       </div>
@@ -171,7 +171,7 @@ export default function Settings() {
                       </div>
 
                       <div className="pt-4">
-                        <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary-600 transition-colors flex items-center space-x-2">
+                        <button className="bg-[#0F4C75] text-white px-6 py-2 rounded-lg hover:bg-[#093049] transition-colors flex items-center space-x-2">
                           <Save className="h-4 w-4" />
                           <span>Save Changes</span>
                         </button>
@@ -220,7 +220,7 @@ export default function Settings() {
                               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
                             />
                           </div>
-                          <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-600 transition-colors">
+                          <button className="bg-[#0F4C75] text-white px-4 py-2 rounded-lg hover:bg-[#093049] transition-colors">
                             Update Password
                           </button>
                         </div>
@@ -392,8 +392,8 @@ export default function Settings() {
                       <div className="bg-gray-50 rounded-lg p-6">
                         <h4 className="text-md font-medium text-gray-900 mb-4">Current Advisor</h4>
                         <div className="flex items-center space-x-4">
-                          <div className="w-12 h-12 bg-secondary/10 rounded-full flex items-center justify-center">
-                            <Users className="h-6 w-6 text-secondary" />
+                          <div className="w-12 h-12 bg-[#3282B8]/10 rounded-full flex items-center justify-center">
+                            <Users className="h-6 w-6 text-[#3282B8]" />
                           </div>
                           <div className="flex-1">
                             <p className="text-sm font-medium text-gray-900">Priya Sharma, CFP</p>
@@ -426,7 +426,7 @@ export default function Settings() {
                             <span className="text-xs text-warning bg-warning/10 px-2 py-1 rounded">Approval Required</span>
                           </div>
                         </div>
-                        <button className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-600 transition-colors">
+                        <button className="mt-4 px-4 py-2 bg-[#0F4C75] text-white rounded-lg hover:bg-[#093049] transition-colors">
                           Modify Permissions
                         </button>
                       </div>

@@ -40,15 +40,15 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
   ]
 
   return (
-    <div className="min-h-screen bg-primary-bg">
+    <div className="min-h-screen bg-[#FAFBFC]">
       {/* Mobile menu button */}
       <div className="lg:hidden">
-        <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-primary-border shadow-sm">
+        <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm">
           <div className="px-4 py-3 flex items-center justify-between">
-            <h1 className="text-xl font-bold text-primary-main">Velo</h1>
+            <h1 className="text-xl font-bold text-[#0F4C75]">Velo</h1>
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="text-primary-text hover:text-primary-main"
+              className="text-gray-900 hover:text-[#0F4C75]"
             >
               {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -57,13 +57,13 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
       </div>
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-primary-border shadow-sm transform ${
+      <div className={`fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-200 shadow-sm transform ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       } lg:translate-x-0 transition-transform duration-300 ease-in-out lg:static lg:inset-0`}>
         <div className="flex h-full flex-col">
           {/* Logo */}
-          <div className="flex h-16 shrink-0 items-center px-6 border-b border-primary-border">
-            <h1 className="text-2xl font-bold text-primary-main">Velo</h1>
+          <div className="flex h-16 shrink-0 items-center px-6 border-b border-gray-200">
+            <h1 className="text-2xl font-bold text-[#0F4C75]">Velo</h1>
           </div>
 
           {/* Navigation */}
@@ -77,8 +77,8 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
                   onClick={() => setSidebarOpen(false)}
                   className={`group flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-primary-main text-white'
-                      : 'text-primary-text hover:bg-gray-50 hover:text-primary-main'
+                      ? 'bg-[#0F4C75] text-white'
+                      : 'text-gray-900 hover:bg-gray-50 hover:text-[#0F4C75]'
                   }`}
                 >
                   <item.icon className="mr-3 h-5 w-5" />
@@ -89,20 +89,20 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
           </nav>
 
           {/* User info and logout */}
-          <div className="border-t border-primary-border p-4">
+          <div className="border-t border-gray-200 p-4">
             <div className="flex items-center mb-3">
-              <div className="w-8 h-8 rounded-full bg-primary-main text-white flex items-center justify-center text-sm font-medium">
+              <div className="w-8 h-8 rounded-full bg-[#0F4C75] text-white flex items-center justify-center text-sm font-medium">
                 {user?.email?.charAt(0).toUpperCase()}
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-primary-text truncate">
+                <p className="text-sm font-medium text-gray-900 truncate">
                   {user?.email}
                 </p>
               </div>
             </div>
             <button
               onClick={handleSignOut}
-              className="group flex w-full items-center px-3 py-2 text-sm font-medium text-primary-text hover:bg-red-50 hover:text-primary-danger rounded-lg transition-colors"
+              className="group flex w-full items-center px-3 py-2 text-sm font-medium text-gray-900 hover:bg-red-50 hover:text-primary-danger rounded-lg transition-colors"
             >
               <LogOut className="mr-3 h-5 w-5" />
               Sign Out
@@ -126,8 +126,8 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
         </main>
         
         {/* Footer */}
-        <footer className="border-t border-primary-border py-4 px-6 bg-white">
-          <div className="text-center text-xs text-primary-text-muted">
+        <footer className="border-t border-gray-200 py-4 px-6 bg-white">
+          <div className="text-center text-xs text-gray-400">
             drmhope.com | A Bettroi Product | v1.0.0
           </div>
         </footer>

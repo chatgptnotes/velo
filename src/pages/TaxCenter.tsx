@@ -45,13 +45,13 @@ export default function TaxCenter() {
                       to={item.href}
                       className={`${
                         isActive
-                          ? 'bg-primary-50 border-r-2 border-primary text-primary'
+                          ? 'bg-blue-50 border-r-2 border-[#0F4C75] text-[#0F4C75]'
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                       } group flex items-center px-3 py-3 text-sm font-medium rounded-l-lg`}
                     >
                       <Icon
                         className={`${
-                          isActive ? 'text-primary' : 'text-gray-400 group-hover:text-gray-500'
+                          isActive ? 'text-[#0F4C75]' : 'text-gray-400 group-hover:text-gray-500'
                         } mr-3 h-5 w-5`}
                       />
                       {item.name}
@@ -99,24 +99,24 @@ export default function TaxCenter() {
 
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <PieChart className="h-6 w-6 text-primary" />
+                  <div className="p-2 bg-[#0F4C75]/10 rounded-lg">
+                    <PieChart className="h-6 w-6 text-[#0F4C75]" />
                   </div>
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Effective Rate</p>
-                    <p className="text-lg font-semibold text-primary">18.5%</p>
+                    <p className="text-lg font-semibold text-[#0F4C75]">18.5%</p>
                   </div>
                 </div>
               </div>
 
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <div className="flex items-center">
-                  <div className="p-2 bg-accent/10 rounded-lg">
-                    <Calendar className="h-6 w-6 text-accent" />
+                  <div className="p-2 bg-[#00B4D8]/10 rounded-lg">
+                    <Calendar className="h-6 w-6 text-[#00B4D8]" />
                   </div>
                   <div className="ml-4">
                     <p className="text-sm font-medium text-gray-600">Tax Saved YTD</p>
-                    <p className="text-lg font-semibold text-accent">{formatCurrency(285000)}</p>
+                    <p className="text-lg font-semibold text-[#00B4D8]">{formatCurrency(285000)}</p>
                   </div>
                 </div>
               </div>
@@ -182,7 +182,7 @@ export default function TaxCenter() {
                       <span className="text-sm text-gray-600">{formatCurrency(25000)} / No Limit</span>
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div className="bg-primary h-2 rounded-full w-1/4"></div>
+                      <div className="bg-[#0F4C75] h-2 rounded-full w-1/4"></div>
                     </div>
                   </div>
                 </div>
@@ -221,25 +221,25 @@ export default function TaxCenter() {
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="p-4 border border-gray-200 rounded-lg text-center">
                   <p className="text-sm font-medium text-gray-900">Q1 - 15th June</p>
-                  <p className="text-lg font-semibold text-primary mt-1">{formatCurrency(212500)}</p>
+                  <p className="text-lg font-semibold text-[#0F4C75] mt-1">{formatCurrency(212500)}</p>
                   <p className="text-xs text-success mt-1">Paid</p>
                 </div>
                 
                 <div className="p-4 border border-gray-200 rounded-lg text-center">
                   <p className="text-sm font-medium text-gray-900">Q2 - 15th Sept</p>
-                  <p className="text-lg font-semibold text-primary mt-1">{formatCurrency(212500)}</p>
+                  <p className="text-lg font-semibold text-[#0F4C75] mt-1">{formatCurrency(212500)}</p>
                   <p className="text-xs text-success mt-1">Paid</p>
                 </div>
                 
-                <div className="p-4 border border-primary bg-primary/5 rounded-lg text-center">
+                <div className="p-4 border border-[#0F4C75] bg-[#0F4C75]/5 rounded-lg text-center">
                   <p className="text-sm font-medium text-gray-900">Q3 - 15th Dec</p>
-                  <p className="text-lg font-semibold text-primary mt-1">{formatCurrency(212500)}</p>
+                  <p className="text-lg font-semibold text-[#0F4C75] mt-1">{formatCurrency(212500)}</p>
                   <p className="text-xs text-warning mt-1">Due Soon</p>
                 </div>
                 
                 <div className="p-4 border border-gray-200 rounded-lg text-center">
                   <p className="text-sm font-medium text-gray-900">Q4 - 15th Mar</p>
-                  <p className="text-lg font-semibold text-primary mt-1">{formatCurrency(212500)}</p>
+                  <p className="text-lg font-semibold text-[#0F4C75] mt-1">{formatCurrency(212500)}</p>
                   <p className="text-xs text-gray-500 mt-1">Pending</p>
                 </div>
               </div>
