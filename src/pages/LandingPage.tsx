@@ -194,7 +194,7 @@ const LandingPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-primary-text-secondary text-sm">
-              drmhope.com | A Bettroi Product | v1.0
+              drmhope.com | A Bettroi Product | v1.0.0
             </p>
           </div>
         </div>

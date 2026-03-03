@@ -128,7 +128,7 @@ const DashboardLayout = ({ children, user }: DashboardLayoutProps) => {
         {/* Footer */}
         <footer className="border-t border-gray-700 py-4 px-6">
           <div className="text-center text-xs text-primary-text-secondary">
-            drmhope.com | A Bettroi Product | v1.0
+            drmhope.com | A Bettroi Product | v1.0.0
           </div>
         </footer>
       </div>
