@@ -67,6 +67,23 @@ const LoginPage = () => {
               </div>
             )}
 
+            
+            {/* Demo Credentials Card */}
+            <button
+              type="button"
+              onClick={() => { setEmail('cmd@hopehospitaal.com'); setPassword('Chindwada@1'); }}
+              className="w-full mb-6 p-4 bg-[#0F4C75]/5 border border-[#0F4C75]/20 rounded-xl hover:bg-[#0F4C75]/10 transition-all text-left group cursor-pointer"
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-[#0F4C75] uppercase tracking-wider">Demo Access</span>
+                <span className="text-[10px] bg-[#0F4C75] text-white px-2 py-0.5 rounded-full">Click to fill</span>
+              </div>
+              <div className="space-y-1">
+                <div className="text-sm text-gray-600"><span className="text-gray-400 w-16 inline-block">Email:</span> cmd@hopehospitaal.com</div>
+                <div className="text-sm text-gray-600"><span className="text-gray-400 w-16 inline-block">Pass:</span> Chindwada@1</div>
+              </div>
+            </button>
+
             <form onSubmit={handleLogin} className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-900 mb-2">
