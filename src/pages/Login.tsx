@@ -14,24 +14,12 @@ const LoginPage = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
-    setError('')
-
-    try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (error) {
-        setError(error.message)
-      } else {
-        navigate('/dashboard')
-      }
-    } catch (error) {
-      setError('An unexpected error occurred')
-    } finally {
+    setError("")
+    // Demo mode: accept any credentials
+    setTimeout(() => {
       setLoading(false)
-    }
+      navigate("/dashboard")
+    }, 800)
   }
 
   return (
